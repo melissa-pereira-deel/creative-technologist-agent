@@ -139,7 +139,7 @@ The agent runs on [Claude Code](https://docs.anthropic.com/claude-code) (or any 
 
 ```bash
 # Clone this repository
-git clone https://github.com/<your-username>/creative-technologist-agent.git
+git clone https://github.com/melissa-pereira-deel/creative-technologist-agent.git
 cd creative-technologist-agent
 
 # Copy the agent definition into Claude's agent directory
