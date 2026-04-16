@@ -1,0 +1,26 @@
+# Personal research (not for publication)
+creative_technologist_exemplars.docx
+creative_technologist_taxonomy.svg
+pesquisa_expandida_creative_technologist.md
+inventores_nao_obvios_creative_technologist.md
+
+# Claude / local tooling
+.claude/
+memory/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Logs / temp
+*.log
+*.tmp
