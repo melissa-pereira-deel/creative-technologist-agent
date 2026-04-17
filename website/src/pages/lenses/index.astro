@@ -1,0 +1,33 @@
+---
+import Base from '../../layouts/Base.astro';
+import { lenses } from '../../data/lenses.js';
+---
+
+<Base title="Lenses" description="19 ways of seeing design problems that most practitioners solve by instinct alone.">
+  <section class="container page-header">
+    <p class="page-header__eyebrow">Ways of seeing</p>
+    <h1 class="page-header__title">19 Lenses</h1>
+    <p class="page-header__descriptor">
+      Each lens is a named way of seeing a class of design problem —
+      the kind of problem that most practitioners solve by instinct alone.
+      Naming it makes it transferable.
+    </p>
+  </section>
+
+  <section class="container lenses-list">
+    {lenses.map((lens, i) => (
+      <a href={`/lenses/${lens.slug}`} class="lens-card">
+        <span class="lens-card__number">{String(i + 1).padStart(2, '0')}</span>
+        <span class="lens-card__title">{lens.title}</span>
+        <span class="lens-card__question">{lens.question}</span>
+      </a>
+    ))}
+  </section>
+</Base>
+
+<style>
+  .lenses-list {
+    padding-top: var(--space-2);
+    padding-bottom: var(--space-20);
+  }
+</style>

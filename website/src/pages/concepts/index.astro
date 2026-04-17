@@ -1,0 +1,35 @@
+---
+import Base from '../../layouts/Base.astro';
+const concepts = await Astro.glob('../../content/concepts/*.md');
+const sorted = concepts.sort((a, b) => a.frontmatter.title.localeCompare(b.frontmatter.title));
+---
+
+<Base title="Concepts" description="The building blocks — ideas that cut across every lens.">
+  <section class="container page-header">
+    <p class="page-header__eyebrow">Building blocks</p>
+    <h1 class="page-header__title">Concepts</h1>
+    <p class="page-header__descriptor">
+      The underlying ideas that multiple lenses draw from.
+      Structural features of how designed things work — proven useful across enough domains
+      to be worth naming.
+    </p>
+  </section>
+
+  <section class="container concepts-section">
+    <div class="index-grid">
+      {sorted.map((c) => (
+        <a href={`/concepts/${c.frontmatter.slug}`} class="concept-card">
+          <div class="concept-card__title">{c.frontmatter.title}</div>
+          <div class="concept-card__tagline">{c.frontmatter.tagline}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .concepts-section {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-20);
+  }
+</style>

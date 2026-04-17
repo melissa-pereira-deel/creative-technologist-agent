@@ -1,0 +1,16 @@
+---
+import Base from '../layouts/Base.astro';
+const pages = await Astro.glob('../content/about.md');
+const page = pages[0];
+---
+
+<Base title="About">
+  <section class="container page-header">
+    <p class="page-header__eyebrow">About</p>
+    <h1 class="page-header__title">What is a creative technologist?</h1>
+  </section>
+
+  <section class="container reading-column">
+    <div class="prose" set:html={page.compiledContent()} />
+  </section>
+</Base>

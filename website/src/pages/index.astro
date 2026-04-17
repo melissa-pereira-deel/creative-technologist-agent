@@ -1,0 +1,220 @@
+---
+import Base from '../layouts/Base.astro';
+
+const lenses = [
+  { slug: 'adjacent-possible', title: 'Adjacent Possible', question: 'What becomes possible next given what exists now?' },
+  { slug: 'analogical-reasoning', title: 'Analogical Reasoning', question: 'What does this problem structurally resemble in another domain?' },
+  { slug: 'coherence-design', title: 'Coherence Design', question: 'Do the parts feel like they belong together?' },
+  { slug: 'constraint-propagation', title: 'Constraint Propagation', question: 'How does one decision ripple through every other?' },
+  { slug: 'deep-deliberation', title: 'Deep Deliberation', question: 'Have I thought long enough before acting?' },
+  { slug: 'economic-model-design', title: 'Economic Model Design', question: 'Where does the money flow and whose incentives does it shape?' },
+  { slug: 'evolutionary-design', title: 'Evolutionary Design', question: 'What is the fitness landscape and how will this design adapt?' },
+  { slug: 'first-principles-reduction', title: 'First-Principles Reduction', question: 'What is essential vs. accidental in this system?' },
+  { slug: 'game-structure', title: 'Game Structure', question: 'Is this a positive-sum or zero-sum game and for whom?' },
+  { slug: 'information-entropy', title: 'Information Entropy', question: 'Where is entropy accumulating and where must it be managed?' },
+  { slug: 'legibility-design', title: 'Legibility Design', question: 'Is the right information visible at the right resolution?' },
+  { slug: 'mechanism-design', title: 'Mechanism Design', question: 'Does the structure of the rules produce the behavior we want?' },
+  { slug: 'network-dynamics', title: 'Network Dynamics', question: 'What phase is this network in and what does it need to advance?' },
+  { slug: 'performance-as-experience', title: 'Performance as Experience', question: 'Which perceptual thresholds does speed let us cross?' },
+  { slug: 'progressive-expertise', title: 'Progressive Expertise', question: 'Does the product grow with the user\'s understanding?' },
+  { slug: 'signal-discrimination', title: 'Signal Discrimination', question: 'What\'s signal, what\'s noise, and how do I tell?' },
+  { slug: 'temporal-reasoning', title: 'Temporal Reasoning', question: 'Where are we in the cycle and which layer is changing?' },
+  { slug: 'tools-for-thought', title: 'Tools for Thought', question: 'Does this automate a task or amplify understanding?' },
+  { slug: 'trust-architecture', title: 'Trust Architecture', question: 'Can a skeptical user verify the claim or must they trust us?' },
+];
+
+const thinkers = await Astro.glob('../content/thinkers/*.md');
+const concepts = await Astro.glob('../content/concepts/*.md');
+---
+
+<Base title="Home">
+  <section class="hero container">
+    <p class="hero__eyebrow text-label">A cabinet of curiosities for creative technologists</p>
+    <h1 class="hero__headline">
+      What separates software<br/>
+      that works from software<br/>
+      that matters?
+    </h1>
+    <p class="hero__lead">
+      Not the stack. Not the velocity.<br/>
+      It's the quality of thinking in the moments before a line of code is written —<br/>
+      and in the moments after it ships.
+    </p>
+    <p class="hero__body">
+      This is a library for those moments. It collects the thinkers, concepts, and principles
+      that shape how the best creative technologists see problems.
+      Not a methodology. A vocabulary.
+    </p>
+  </section>
+
+  <section class="home-grid container">
+    <a href="/lenses" class="home-grid__card">
+      <span class="home-grid__count">{lenses.length}</span>
+      <h2 class="home-grid__title">Lenses</h2>
+      <p class="home-grid__desc">Ways of seeing problems that most people solve by instinct alone.</p>
+      <span class="home-grid__cta">Explore →</span>
+    </a>
+    <a href="/thinkers" class="home-grid__card">
+      <span class="home-grid__count">{thinkers.length}</span>
+      <h2 class="home-grid__title">Thinkers</h2>
+      <p class="home-grid__desc">The people whose ideas made these ways of seeing possible.</p>
+      <span class="home-grid__cta">Discover →</span>
+    </a>
+    <a href="/concepts" class="home-grid__card">
+      <span class="home-grid__count">{concepts.length}</span>
+      <h2 class="home-grid__title">Concepts</h2>
+      <p class="home-grid__desc">The building blocks — ideas that cut across every lens.</p>
+      <span class="home-grid__cta">Read →</span>
+    </a>
+  </section>
+
+  <section class="home-lenses container">
+    <div class="home-section-header">
+      <h2 class="home-section-header__title">19 Lenses</h2>
+      <a href="/lenses" class="home-section-header__link">View all →</a>
+    </div>
+    {lenses.slice(0, 6).map((lens, i) => (
+      <a href={`/lenses/${lens.slug}`} class="lens-card">
+        <span class="lens-card__number">{String(i + 1).padStart(2, '0')}</span>
+        <span class="lens-card__title">{lens.title}</span>
+        <span class="lens-card__question">{lens.question}</span>
+      </a>
+    ))}
+    <a href="/lenses" class="home-lenses__more">View all 19 lenses →</a>
+  </section>
+
+  <section class="home-thinkers container">
+    <div class="home-section-header">
+      <h2 class="home-section-header__title">Thinkers</h2>
+      <a href="/thinkers" class="home-section-header__link">View all →</a>
+    </div>
+    <div class="index-grid index-grid--thinkers">
+      {thinkers.slice(0, 4).map((t) => (
+        <a href={`/thinkers/${t.frontmatter.slug}`} class="thinker-card">
+          <div class="thinker-card__name">{t.frontmatter.name}</div>
+          <div class="thinker-card__dates">{t.frontmatter.dates}</div>
+          <div class="thinker-card__tagline">{t.frontmatter.field}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* ── HERO ──────────────────────────────────────────────── */
+  .hero {
+    padding-top: var(--space-16);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-rule);
+    max-width: 860px;
+  }
+  .hero__eyebrow {
+    color: var(--color-ochre);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    margin-bottom: var(--space-6);
+  }
+  .hero__headline {
+    font-family: var(--font-display);
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    font-stretch: expanded;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-8);
+  }
+  .hero__lead {
+    font-size: var(--text-md);
+    color: var(--color-muted);
+    font-style: italic;
+    line-height: 1.7;
+    margin-bottom: var(--space-5);
+  }
+  .hero__body {
+    font-size: var(--text-base);
+    line-height: 1.75;
+    max-width: 60ch;
+    color: var(--color-muted);
+  }
+
+  /* ── HOME GRID ─────────────────────────────────────────── */
+  .home-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .home-grid__card {
+    padding: var(--space-10) var(--space-6);
+    border-right: 1px solid var(--color-rule);
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    transition: background 0.2s ease;
+  }
+  .home-grid__card:last-child { border-right: none; }
+  .home-grid__card:hover { background: var(--color-surface); }
+  .home-grid__count {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--color-ochre);
+    line-height: 1;
+  }
+  .home-grid__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+  }
+  .home-grid__desc {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    line-height: 1.6;
+    flex: 1;
+  }
+  .home-grid__cta {
+    font-size: var(--text-sm);
+    color: var(--color-ochre);
+    font-weight: 500;
+  }
+
+  /* ── HOME SECTIONS ─────────────────────────────────────── */
+  .home-lenses, .home-thinkers {
+    padding-top: var(--space-14);
+    padding-bottom: var(--space-14);
+    border-bottom: 1px solid var(--color-rule);
+  }
+  .home-section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: var(--space-8);
+  }
+  .home-section-header__title {
+    font-family: var(--font-display);
+    font-size: var(--text-xl);
+    font-weight: 700;
+  }
+  .home-section-header__link {
+    font-size: var(--text-sm);
+    color: var(--color-ochre);
+    text-decoration: none;
+  }
+  .home-lenses__more {
+    display: inline-block;
+    margin-top: var(--space-6);
+    font-size: var(--text-sm);
+    color: var(--color-ochre);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .home-grid { grid-template-columns: 1fr; }
+    .home-grid__card { border-right: none; border-bottom: 1px solid var(--color-rule); }
+    .lens-card { grid-template-columns: 2rem 1fr; }
+    .lens-card__question { display: none; }
+  }
+</style>

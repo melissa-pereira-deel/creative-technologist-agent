@@ -1,0 +1,176 @@
+---
+import Base from '../../layouts/Base.astro';
+import { lenses } from '../../data/lenses.js';
+
+export function getStaticPaths() {
+  return lenses.map((lens, i) => ({
+    params: { slug: lens.slug },
+    props: { lens, index: i },
+  }));
+}
+
+const { lens, index } = Astro.props;
+const prev = index > 0 ? lenses[index - 1] : null;
+const next = index < lenses.length - 1 ? lenses[index + 1] : null;
+---
+
+<Base title={lens.title} description={lens.question}>
+  <section class="container lens-header">
+    <a href="/lenses" class="back-link">← All lenses</a>
+    <div class="lens-number">{String(index + 1).padStart(2, '0')}</div>
+    <h1 class="lens-title">{lens.title}</h1>
+    <p class="lens-question">{lens.question}</p>
+  </section>
+
+  <section class="container reading-column lens-body">
+    <p class="lens-description">{lens.description}</p>
+
+    {(lens.thinkers.length > 0 || lens.concepts.length > 0) && (
+      <div class="lens-connections">
+        {lens.thinkers.length > 0 && (
+          <div class="lens-connections__group">
+            <span class="lens-connections__label">Thinkers</span>
+            <div class="lens-connections__tags">
+              {lens.thinkers.map(slug => (
+                <a href={`/thinkers/${slug}`} class="connection-tag">
+                  <span class="connection-tag__type">thinker</span>
+                  {slug.replace(/-/g, ' ')}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+        {lens.concepts.length > 0 && (
+          <div class="lens-connections__group">
+            <span class="lens-connections__label">Concepts</span>
+            <div class="lens-connections__tags">
+              {lens.concepts.map(slug => (
+                <a href={`/concepts/${slug}`} class="connection-tag">
+                  <span class="connection-tag__type">concept</span>
+                  {slug.replace(/-/g, ' ')}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    )}
+  </section>
+
+  <nav class="container lens-nav">
+    {prev ? (
+      <a href={`/lenses/${prev.slug}`} class="lens-nav__link lens-nav__link--prev">
+        <span class="lens-nav__dir">← Previous</span>
+        <span class="lens-nav__name">{prev.title}</span>
+      </a>
+    ) : <span />}
+    {next ? (
+      <a href={`/lenses/${next.slug}`} class="lens-nav__link lens-nav__link--next">
+        <span class="lens-nav__dir">Next →</span>
+        <span class="lens-nav__name">{next.title}</span>
+      </a>
+    ) : <span />}
+  </nav>
+</Base>
+
+<style>
+  .lens-header {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-rule);
+    margin-bottom: var(--space-12);
+  }
+  .back-link {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-8);
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--color-ochre); }
+  .lens-number {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+  .lens-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    font-stretch: expanded;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-5);
+  }
+  .lens-question {
+    font-size: var(--text-lg);
+    color: var(--color-muted);
+    font-style: italic;
+    max-width: 60ch;
+  }
+
+  .lens-body {
+    padding-bottom: var(--space-16);
+  }
+  .lens-description {
+    font-size: var(--text-md);
+    line-height: 1.75;
+    color: var(--color-ink);
+    margin-bottom: var(--space-12);
+  }
+
+  .lens-connections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-rule);
+  }
+  .lens-connections__group {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+  .lens-connections__label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    min-width: 5rem;
+  }
+  .lens-connections__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .lens-nav {
+    display: flex;
+    justify-content: space-between;
+    padding-top: var(--space-8);
+    padding-bottom: var(--space-16);
+    border-top: 1px solid var(--color-rule);
+  }
+  .lens-nav__link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    text-decoration: none;
+  }
+  .lens-nav__link--next { align-items: flex-end; }
+  .lens-nav__dir {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  .lens-nav__name {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    color: var(--color-ochre);
+  }
+</style>

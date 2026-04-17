@@ -1,0 +1,133 @@
+---
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const concepts = await Astro.glob('../../content/concepts/*.md');
+  return concepts.map((c) => ({
+    params: { slug: c.frontmatter.slug },
+    props: { concept: c },
+  }));
+}
+
+const { concept } = Astro.props;
+const { title, tagline, origin, lenses = [] } = concept.frontmatter;
+---
+
+<Base title={title} description={tagline}>
+  <section class="container concept-header">
+    <a href="/concepts" class="back-link">← All concepts</a>
+    <p class="concept-header__eyebrow">Concept</p>
+    <h1 class="concept-header__title">{title}</h1>
+    {tagline && <p class="concept-header__tagline">{tagline}</p>}
+  </section>
+
+  <section class="container reading-column concept-prose">
+    <div class="prose" set:html={concept.compiledContent()} />
+  </section>
+
+  {(lenses.length > 0 || origin) && (
+    <section class="container reading-column concept-connections">
+      <div class="connections-block">
+        {origin && (
+          <div class="connections-row">
+            <span class="connections-label">Origin</span>
+            <div class="connections-tags">
+              <a href={`/thinkers/${origin}`} class="connection-tag">
+                <span class="connection-tag__type">thinker</span>
+                {origin.replace(/-/g, ' ')}
+              </a>
+            </div>
+          </div>
+        )}
+        {lenses.length > 0 && (
+          <div class="connections-row">
+            <span class="connections-label">Lenses</span>
+            <div class="connections-tags">
+              {lenses.map((slug) => (
+                <a href={`/lenses/${slug}`} class="connection-tag">
+                  <span class="connection-tag__type">lens</span>
+                  {slug.replace(/-/g, ' ')}
+                </a>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .concept-header {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-rule);
+    margin-bottom: var(--space-12);
+  }
+  .back-link {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-8);
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--color-ochre); }
+  .concept-header__eyebrow {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ochre);
+    margin-bottom: var(--space-3);
+  }
+  .concept-header__title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    font-stretch: expanded;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-4);
+  }
+  .concept-header__tagline {
+    font-size: var(--text-md);
+    color: var(--color-muted);
+    font-style: italic;
+    max-width: 56ch;
+  }
+
+  .concept-prose {
+    padding-bottom: var(--space-10);
+  }
+
+  .concept-connections {
+    padding-bottom: var(--space-20);
+  }
+
+  .connections-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-rule);
+  }
+  .connections-row {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+  .connections-label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    min-width: 5rem;
+  }
+  .connections-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

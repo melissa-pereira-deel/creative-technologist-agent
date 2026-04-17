@@ -24,4 +24,14 @@ memory/
 # Logs / temp
 *.log
 *.tmp
-website/
+
+# Website — build output & dependencies
+website/node_modules/
+website/dist/
+website/.astro/
+
+# Commercial fonts — not committed (PP license; install separately)
+website/public/fonts/
+
+# Portrait images — not committed (licensing; download separately via BACKLOG.md)
+website/public/images/

@@ -1,0 +1,142 @@
+/* ============================================================
+   LOCAL FONTS — PP Neue Corp + PP Neue Montreal
+   ============================================================ */
+
+/* ── PP NEUE CORP (Normal width) ───────────────────────────── */
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-NormalMedium.woff2') format('woff2');
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-NormalMediumItalic.woff2') format('woff2');
+  font-weight: 500;
+  font-stretch: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-NormalUltrabold.woff2') format('woff2');
+  font-weight: 700 800;
+  font-stretch: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-NormalUltraboldItalic.woff2') format('woff2');
+  font-weight: 700 800;
+  font-stretch: normal;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-NormalBlack.woff2') format('woff2');
+  font-weight: 900;
+  font-stretch: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ── PP NEUE CORP (Wide width — display/hero only) ─────────── */
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-WideUltrabold.woff2') format('woff2');
+  font-weight: 700 800;
+  font-stretch: expanded;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-WideUltraboldItalic.woff2') format('woff2');
+  font-weight: 700 800;
+  font-stretch: expanded;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Corp';
+  src: url('/fonts/PPNeueCorp-WideBlack.woff2') format('woff2');
+  font-weight: 900;
+  font-stretch: expanded;
+  font-style: normal;
+  font-display: swap;
+}
+
+
+/* ── PP NEUE MONTREAL ──────────────────────────────────────── */
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Italic.woff2') format('woff2');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal';
+  src: url('/fonts/PPNeueMontreal-BoldItalic.woff2') format('woff2');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+
+/* ── PP NEUE MONTREAL MONO ─────────────────────────────────── */
+
+@font-face {
+  font-family: 'PP Neue Montreal Mono';
+  src: url('/fonts/PPNeueMontrealMono-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'PP Neue Montreal Mono';
+  src: url('/fonts/PPNeueMontrealMono-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}

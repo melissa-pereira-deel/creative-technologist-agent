@@ -1,0 +1,311 @@
+---
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const thinkers = await Astro.glob('../../content/thinkers/*.md');
+  return thinkers.map((t) => ({
+    params: { slug: t.frontmatter.slug },
+    props: { thinker: t },
+  }));
+}
+
+const { thinker } = Astro.props;
+const { name, dates, field, quote, lenses = [], website, books = [], talks = [], portrait, portrait_credit } = thinker.frontmatter;
+---
+
+<Base title={name} description={`${name} — ${field}`}>
+  <section class="container thinker-header">
+    <a href="/thinkers" class="back-link">← All thinkers</a>
+    <div class="thinker-header__layout">
+      <div class="thinker-header__meta">
+        <p class="thinker-header__field">{field}</p>
+        <h1 class="thinker-header__name">{name}</h1>
+        <p class="thinker-header__dates">{dates}</p>
+      </div>
+      {portrait && (
+        <div class="thinker-header__portrait-wrap">
+          <img
+            class="thinker-header__portrait"
+            src={portrait}
+            alt={name}
+            width="240"
+            height="240"
+          />
+          {portrait_credit && <p class="thinker-header__credit">{portrait_credit}</p>}
+        </div>
+      )}
+    </div>
+  </section>
+
+  {quote && (
+    <section class="container reading-column">
+      <blockquote class="pull-quote">
+        <p class="pull-quote__text">"{quote}"</p>
+        <p class="pull-quote__attribution">— {name}</p>
+      </blockquote>
+    </section>
+  )}
+
+  <section class="container reading-column thinker-prose">
+    <div class="prose" set:html={thinker.compiledContent()} />
+  </section>
+
+  {(books.length > 0 || talks.length > 0 || website) && (
+    <section class="container reading-column thinker-resources">
+      <div class="resources-block">
+        <h2 class="resources-heading">Read &amp; Watch</h2>
+
+        {books.length > 0 && (
+          <div class="resources-group">
+            <span class="resources-label">Books</span>
+            <ul class="resource-list">
+              {books.map((book) => (
+                <li class="resource-item">
+                  <div class="resource-item__title">{book.title}</div>
+                  <div class="resource-item__meta">{book.year}</div>
+                  <p class="resource-item__description">{book.description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {talks.length > 0 && (
+          <div class="resources-group">
+            <span class="resources-label">Talks</span>
+            <ul class="resource-list">
+              {talks.map((talk) => (
+                <li class="resource-item">
+                  <div class="resource-item__title">{talk.title}</div>
+                  <div class="resource-item__meta">{talk.year} · {talk.platform}</div>
+                  <p class="resource-item__description">{talk.description}</p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {website && (
+          <div class="resources-group">
+            <span class="resources-label">Online</span>
+            <a href={website} class="website-link" target="_blank" rel="noopener noreferrer">
+              Official site / archive →
+            </a>
+          </div>
+        )}
+      </div>
+    </section>
+  )}
+
+  {lenses.length > 0 && (
+    <section class="container reading-column thinker-connections">
+      <div class="lens-connections">
+        <div class="lens-connections__group">
+          <span class="lens-connections__label">Lenses</span>
+          <div class="lens-connections__tags">
+            {lenses.map((slug) => (
+              <a href={`/lenses/${slug}`} class="connection-tag">
+                <span class="connection-tag__type">lens</span>
+                {slug.replace(/-/g, ' ')}
+              </a>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  )}
+</Base>
+
+<style>
+  .thinker-header {
+    padding-top: var(--space-10);
+    padding-bottom: var(--space-10);
+    border-bottom: 1px solid var(--color-rule);
+    margin-bottom: var(--space-12);
+  }
+  .back-link {
+    display: inline-block;
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    margin-bottom: var(--space-8);
+    transition: color 0.15s ease;
+  }
+  .back-link:hover { color: var(--color-ochre); }
+
+  .thinker-header__layout {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: var(--space-8);
+  }
+  .thinker-header__meta {
+    flex: 1;
+  }
+  .thinker-header__field {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-ochre);
+    margin-bottom: var(--space-3);
+  }
+  .thinker-header__name {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    font-stretch: expanded;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: var(--space-3);
+  }
+  .thinker-header__dates {
+    font-size: var(--text-sm);
+    color: var(--color-muted);
+    font-style: italic;
+  }
+  .thinker-header__portrait-wrap {
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: var(--space-2);
+  }
+  .thinker-header__portrait {
+    width: 160px;
+    height: 160px;
+    object-fit: cover;
+    object-position: top;
+    border-radius: var(--radius-md);
+    filter: grayscale(100%);
+    opacity: 0.85;
+    transition: filter 0.3s ease, opacity 0.3s ease;
+  }
+  .thinker-header__portrait:hover {
+    filter: grayscale(0%);
+    opacity: 1;
+  }
+  .thinker-header__credit {
+    font-size: 10px;
+    color: var(--color-muted);
+    opacity: 0.6;
+    max-width: 160px;
+    text-align: right;
+    line-height: 1.4;
+  }
+
+  .thinker-prose {
+    padding-bottom: var(--space-10);
+  }
+
+  /* ── Resources ─────────────────────────────────────── */
+
+  .thinker-resources {
+    padding-bottom: var(--space-12);
+  }
+
+  .resources-block {
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-rule);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .resources-heading {
+    font-family: var(--font-display);
+    font-size: var(--text-lg);
+    font-weight: 800;
+    font-stretch: expanded;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    margin-bottom: var(--space-2);
+  }
+
+  .resources-group {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .resources-label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+  }
+
+  .resource-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .resource-item {
+    padding: var(--space-5) var(--space-6);
+    background: var(--color-surface);
+    border-radius: var(--radius-md);
+  }
+
+  .resource-item__title {
+    font-family: var(--font-display);
+    font-size: var(--text-base);
+    font-weight: 700;
+    margin-bottom: var(--space-1);
+  }
+
+  .resource-item__meta {
+    font-size: var(--text-xs);
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-3);
+  }
+
+  .resource-item__description {
+    font-size: var(--text-sm);
+    color: var(--color-ink);
+    line-height: var(--leading-base);
+  }
+
+  .website-link {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-ochre);
+    transition: color 0.15s ease;
+  }
+  .website-link:hover { color: var(--color-ochre-d); }
+
+  /* ── Connections ───────────────────────────────────── */
+
+  .thinker-connections {
+    padding-bottom: var(--space-20);
+  }
+
+  .lens-connections {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-rule);
+  }
+  .lens-connections__group {
+    display: flex;
+    align-items: baseline;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+  }
+  .lens-connections__label {
+    font-size: var(--text-xs);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+    min-width: 5rem;
+  }
+  .lens-connections__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+</style>

@@ -1,0 +1,89 @@
+---
+import Base from '../../layouts/Base.astro';
+const thinkers = await Astro.glob('../../content/thinkers/*.md');
+const sorted = thinkers.sort((a, b) => a.frontmatter.name.localeCompare(b.frontmatter.name));
+---
+
+<Base title="Thinkers" description="The people whose ideas made these ways of seeing possible.">
+  <section class="container page-header">
+    <p class="page-header__eyebrow">The shoulders</p>
+    <h1 class="page-header__title">Thinkers</h1>
+    <p class="page-header__descriptor">
+      The people whose ideas made these ways of seeing possible.
+      Each one handed us a lens we didn't have before.
+    </p>
+  </section>
+
+  <section class="container thinkers-section">
+    <div class="index-grid index-grid--thinkers">
+      {sorted.map((t) => (
+        <a href={`/thinkers/${t.frontmatter.slug}`} class="thinker-card">
+          <div class="thinker-card__portrait-frame">
+            {t.frontmatter.portrait ? (
+              <img
+                class="thinker-card__portrait"
+                src={t.frontmatter.portrait}
+                alt={t.frontmatter.name}
+              />
+            ) : (
+              <div class="thinker-card__portrait-placeholder">
+                <span>{t.frontmatter.name.split(' ').map(n => n[0]).join('')}</span>
+              </div>
+            )}
+          </div>
+          <div class="thinker-card__name">{t.frontmatter.name}</div>
+          <div class="thinker-card__dates">{t.frontmatter.dates}</div>
+          <div class="thinker-card__tagline">{t.frontmatter.field}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+</Base>
+
+<style>
+  .thinkers-section {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-20);
+  }
+
+  .thinker-card__portrait-frame {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-rule);
+    border-radius: calc(var(--radius-md) - 4px);
+  }
+
+  .thinker-card__portrait {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+    filter: grayscale(100%);
+    opacity: 0.85;
+    transition: opacity var(--transition-base), filter var(--transition-base);
+  }
+
+  .thinker-card:hover .thinker-card__portrait {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+
+  .thinker-card__portrait-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .thinker-card__portrait-placeholder span {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    font-stretch: expanded;
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+  }
+</style>
