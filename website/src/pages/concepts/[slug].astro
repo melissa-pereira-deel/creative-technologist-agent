@@ -33,7 +33,6 @@ const { title, tagline, origin, lenses = [] } = concept.frontmatter;
             <span class="connections-label">Origin</span>
             <div class="connections-tags">
               <a href={`/thinkers/${origin}`} class="connection-tag">
-                <span class="connection-tag__type">thinker</span>
                 {origin.replace(/-/g, ' ')}
               </a>
             </div>
@@ -45,7 +44,6 @@ const { title, tagline, origin, lenses = [] } = concept.frontmatter;
             <div class="connections-tags">
               {lenses.map((slug) => (
                 <a href={`/lenses/${slug}`} class="connection-tag">
-                  <span class="connection-tag__type">lens</span>
                   {slug.replace(/-/g, ' ')}
                 </a>
               ))}

@@ -1,0 +1,204 @@
+---
+/**
+ * AsciiPortrait.astro
+ *
+ * Renders a thinker portrait as ASCII art with two effects:
+ *   1. Scroll-triggered scramble→settle animation (IntersectionObserver)
+ *   2. Hover crossfade to the real photograph
+ *
+ * The <pre> is position:absolute and JS scales it to fill the container
+ * exactly, regardless of cols count or container size.
+ *
+ * Props:
+ *   id    — thinker slug (key in ascii-portraits.json)
+ *   name  — used for alt text and aria label
+ *   photo — path to actual portrait image (optional)
+ */
+
+interface Props {
+  id: string;
+  name: string;
+  photo?: string;
+}
+
+const { id, name, photo } = Astro.props;
+
+let portraitData: { rows: string[]; cols: number; rowCount: number } | null = null;
+let animationConfig = { scrambleDuration: 900, rowStagger: 0.4, crossfadeDuration: 500, intersectionThreshold: 0.35 };
+
+try {
+  const asciiJson = await import('../data/ascii-portraits.json');
+  const root = asciiJson.default as {
+    portraits: Record<string, { rows: string[]; cols: number; rowCount: number }>;
+  };
+  portraitData = root.portraits?.[id] ?? null;
+} catch {
+  // ascii-portraits.json hasn't been generated yet; graceful fallback
+}
+
+try {
+  const cfg = await import('../data/ascii-config.json');
+  const anim = (cfg.default as Record<string, unknown>).animation as typeof animationConfig | undefined;
+  if (anim) animationConfig = anim;
+} catch {
+  // use defaults
+}
+
+const hasAscii = portraitData !== null;
+const initials = name.split(' ').map((n: string) => n[0]).join('');
+---
+
+<div
+  class="ascii-portrait"
+  data-ascii-id={id}
+  data-has-ascii={hasAscii ? 'true' : 'false'}
+  data-scramble-duration={animationConfig.scrambleDuration}
+  data-row-stagger={animationConfig.rowStagger}
+  data-crossfade-duration={animationConfig.crossfadeDuration}
+  data-intersection-threshold={animationConfig.intersectionThreshold}
+>
+  {hasAscii && (
+    <pre
+      class="ascii-portrait__pre"
+      aria-hidden="true"
+      data-rows={JSON.stringify(portraitData!.rows)}
+    >{portraitData!.rows.join('\n')}</pre>
+  )}
+
+  {!hasAscii && !photo && (
+    <div class="ascii-portrait__placeholder">
+      <span class="ascii-portrait__initials">{initials}</span>
+    </div>
+  )}
+
+  {photo && (
+    <img
+      class={`ascii-portrait__photo${hasAscii ? ' ascii-portrait__photo--overlay' : ''}`}
+      src={photo}
+      alt={name}
+      loading="lazy"
+    />
+  )}
+
+  <span class="sr-only">{name}</span>
+</div>
+
+<style>
+  .ascii-portrait {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background: var(--color-rule, #e8e5e0);
+    border-radius: inherit;
+  }
+
+  .ascii-portrait__pre {
+    /* Absolute so it can expand to natural width; JS scales it to fit */
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: max-content;
+    height: auto;
+    transform-origin: top left;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 10px; /* baseline — JS overrides via transform scale */
+    line-height: 1.18;
+    white-space: pre;
+    color: var(--color-fg, #1a1815);
+    background: transparent;
+    border: none;
+    opacity: 1;
+    user-select: none;
+  }
+
+  .ascii-portrait__photo {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    filter: grayscale(100%);
+    opacity: 0.85;
+    transition: opacity var(--crossfade-duration, 500ms), filter var(--crossfade-duration, 500ms);
+  }
+
+  /* With ASCII: photo overlays as a hover effect */
+  .ascii-portrait__photo--overlay {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .ascii-portrait:hover .ascii-portrait__photo--overlay {
+    opacity: 0.9;
+    filter: grayscale(0%);
+  }
+
+  /* Without ASCII: photo is the main display */
+  .ascii-portrait__photo:not(.ascii-portrait__photo--overlay) {
+    position: relative;
+  }
+
+  .ascii-portrait:hover .ascii-portrait__photo:not(.ascii-portrait__photo--overlay) {
+    opacity: 1;
+    filter: grayscale(0%);
+  }
+
+  .ascii-portrait__placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ascii-portrait__initials {
+    font-family: var(--font-display);
+    font-size: 2rem;
+    font-weight: 800;
+    font-stretch: expanded;
+    color: var(--color-muted);
+    letter-spacing: 0.05em;
+  }
+
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+</style>
+
+<script>
+  function scalePreToFit(el: HTMLElement): void {
+    const pre = el.querySelector<HTMLPreElement>('.ascii-portrait__pre');
+    if (!pre) return;
+    const containerW = el.offsetWidth;
+    const naturalW = pre.offsetWidth;
+    if (naturalW > 0 && containerW > 0) {
+      pre.style.transform = `scale(${containerW / naturalW})`;
+    }
+  }
+
+  function init() {
+    const portraits = document.querySelectorAll<HTMLElement>('.ascii-portrait[data-has-ascii="true"]');
+    if (portraits.length === 0) return;
+    portraits.forEach(scalePreToFit);
+    window.addEventListener('resize', () => portraits.forEach(scalePreToFit), { passive: true });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

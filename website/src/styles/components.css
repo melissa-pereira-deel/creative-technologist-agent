@@ -11,7 +11,6 @@
   align-items: center;
   justify-content: space-between;
   padding: var(--space-5) 0;
-  border-bottom: var(--border);
 }
 
 .nav__wordmark {
@@ -45,8 +44,8 @@
 
 .lens-card {
   display: grid;
-  grid-template-columns: 3rem 1fr auto;
-  align-items: baseline;
+  grid-template-columns: 3rem 1fr;
+  align-items: center;
   gap: var(--space-5);
   padding: var(--space-5) 0;
   border-top: var(--border);
@@ -69,10 +68,18 @@
   color: var(--color-muted);
 }
 
+.lens-card__body {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-6);
+  overflow: hidden;
+}
+
 .lens-card__title {
   font-family: var(--font-display);
   font-size: var(--text-base);
   font-weight: var(--weight-bold);
+  flex-shrink: 0;
   transition: color var(--transition-fast);
 }
 
@@ -80,8 +87,17 @@
   font-size: var(--text-sm);
   color: var(--color-muted);
   font-style: italic;
-  text-align: right;
-  max-width: 40%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0;
+  transform: translateX(10px);
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.lens-card:hover .lens-card__question {
+  opacity: 1;
+  transform: translateX(0);
 }
 
 
@@ -91,16 +107,17 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  padding: var(--space-6);
+  padding: calc(var(--space-6) - 2px);
   background: var(--color-surface);
   border-radius: var(--radius-md);
+  border: 2px solid transparent;
   text-decoration: none;
   color: inherit;
-  transition: background var(--transition-base);
+  transition: border-color var(--transition-base);
 }
 
 .thinker-card:hover {
-  background: var(--color-ochre-l);
+  border-color: var(--color-ink);
 }
 
 .thinker-card__portrait {
@@ -140,19 +157,20 @@
 /* ── CONCEPT CARD ──────────────────────────────────────────── */
 
 .concept-card {
-  padding: var(--space-6);
+  padding: calc(var(--space-6) - 2px);
   background: var(--color-surface);
   border-radius: var(--radius-md);
+  border: 2px solid transparent;
   text-decoration: none;
   color: inherit;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
-  transition: background var(--transition-fast);
+  transition: border-color var(--transition-base);
 }
 
 .concept-card:hover {
-  background: var(--color-ochre-l);
+  border-color: var(--color-ink);
 }
 
 .concept-card__title {
@@ -173,8 +191,8 @@
 /* ── PULL QUOTE ────────────────────────────────────────────── */
 
 .pull-quote {
-  border-top: var(--border-dark);
-  border-bottom: var(--border-dark);
+  border-top: var(--border);
+  border-bottom: var(--border);
   padding: var(--space-7) 0;
   margin: var(--space-10) 0;
 }
@@ -219,11 +237,6 @@
   color: var(--color-paper);
 }
 
-.connection-tag__type {
-  color: var(--color-muted);
-  font-weight: var(--weight-regular);
-}
-
 
 /* ── INDEX GRID ────────────────────────────────────────────── */
 
@@ -244,7 +257,7 @@
 .page-header {
   padding-top: var(--space-16);
   padding-bottom: var(--space-10);
-  border-bottom: var(--border-dark);
+  border-bottom: var(--border);
   margin-bottom: var(--space-12);
 }
 

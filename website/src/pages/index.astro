@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import AsciiPortrait from '../components/AsciiPortrait.astro';
 
 const lenses = [
   { slug: 'adjacent-possible', title: 'Adjacent Possible', question: 'What becomes possible next given what exists now?' },
@@ -29,21 +30,19 @@ const concepts = await Astro.glob('../content/concepts/*.md');
 
 <Base title="Home">
   <section class="hero container">
-    <p class="hero__eyebrow text-label">A cabinet of curiosities for creative technologists</p>
+    <p class="hero__eyebrow text-label">A thinking library for creative technologists</p>
     <h1 class="hero__headline">
-      What separates software<br/>
-      that works from software<br/>
+      What separates technology<br/>
+      that works from the one<br/>
       that matters?
     </h1>
     <p class="hero__lead">
-      Not the stack. Not the velocity.<br/>
-      It's the quality of thinking in the moments before a line of code is written —<br/>
-      and in the moments after it ships.
+      Not the stack. Not the velocity. It's the quality of thinking<br/>
+      in the moments before a line of code is written — and in the moments after it ships.
     </p>
     <p class="hero__body">
-      This is a library for those moments. It collects the thinkers, concepts, and principles
-      that shape how the best creative technologists see problems.
-      Not a methodology. A vocabulary.
+      This is a library for those moments — the thinkers, concepts, and principles<br/>
+      that shape how creative technologists see problems. Not a methodology. <span class="nobr">A vocabulary.</span>
     </p>
   </section>
 
@@ -76,8 +75,10 @@ const concepts = await Astro.glob('../content/concepts/*.md');
     {lenses.slice(0, 6).map((lens, i) => (
       <a href={`/lenses/${lens.slug}`} class="lens-card">
         <span class="lens-card__number">{String(i + 1).padStart(2, '0')}</span>
-        <span class="lens-card__title">{lens.title}</span>
-        <span class="lens-card__question">{lens.question}</span>
+        <span class="lens-card__body">
+          <span class="lens-card__title">{lens.title}</span>
+          <span class="lens-card__question">{lens.question}</span>
+        </span>
       </a>
     ))}
     <a href="/lenses" class="home-lenses__more">View all 19 lenses →</a>
@@ -91,9 +92,31 @@ const concepts = await Astro.glob('../content/concepts/*.md');
     <div class="index-grid index-grid--thinkers">
       {thinkers.slice(0, 4).map((t) => (
         <a href={`/thinkers/${t.frontmatter.slug}`} class="thinker-card">
+          <div class="thinker-card__portrait-frame">
+            <AsciiPortrait
+              id={t.frontmatter.slug}
+              name={t.frontmatter.name}
+              photo={t.frontmatter.portrait}
+            />
+          </div>
           <div class="thinker-card__name">{t.frontmatter.name}</div>
           <div class="thinker-card__dates">{t.frontmatter.dates}</div>
           <div class="thinker-card__tagline">{t.frontmatter.field}</div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="home-concepts container">
+    <div class="home-section-header">
+      <h2 class="home-section-header__title">Concepts</h2>
+      <a href="/concepts" class="home-section-header__link">View all →</a>
+    </div>
+    <div class="index-grid">
+      {concepts.slice(0, 4).map((c) => (
+        <a href={`/concepts/${c.frontmatter.slug}`} class="concept-card">
+          <div class="concept-card__title">{c.frontmatter.title}</div>
+          <p class="concept-card__tagline">{c.frontmatter.tagline}</p>
         </a>
       ))}
     </div>
@@ -105,7 +128,6 @@ const concepts = await Astro.glob('../content/concepts/*.md');
   .hero {
     padding-top: var(--space-16);
     padding-bottom: var(--space-16);
-    border-bottom: 1px solid var(--color-rule);
     max-width: 860px;
   }
   .hero__eyebrow {
@@ -117,7 +139,7 @@ const concepts = await Astro.glob('../content/concepts/*.md');
   }
   .hero__headline {
     font-family: var(--font-display);
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-size: clamp(2.5rem, 6vw, 3.5rem);
     font-weight: 800;
     font-stretch: expanded;
     line-height: 1.05;
@@ -134,15 +156,17 @@ const concepts = await Astro.glob('../content/concepts/*.md');
   .hero__body {
     font-size: var(--text-base);
     line-height: 1.75;
-    max-width: 60ch;
     color: var(--color-muted);
   }
+
+  .nobr { white-space: nowrap; }
 
   /* ── HOME GRID ─────────────────────────────────────────── */
   .home-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 0;
+    border-top: 1px solid var(--color-rule);
     border-bottom: 1px solid var(--color-rule);
   }
   .home-grid__card {
@@ -161,7 +185,7 @@ const concepts = await Astro.glob('../content/concepts/*.md');
     font-family: var(--font-display);
     font-size: 3rem;
     font-weight: 700;
-    color: var(--color-ochre);
+    color: var(--color-ink);
     line-height: 1;
   }
   .home-grid__title {
@@ -187,6 +211,11 @@ const concepts = await Astro.glob('../content/concepts/*.md');
     padding-bottom: var(--space-14);
     border-bottom: 1px solid var(--color-rule);
   }
+
+  .home-concepts {
+    padding-top: var(--space-14);
+    padding-bottom: var(--space-8);
+  }
   .home-section-header {
     display: flex;
     align-items: baseline;
@@ -209,6 +238,20 @@ const concepts = await Astro.glob('../content/concepts/*.md');
     font-size: var(--text-sm);
     color: var(--color-ochre);
     text-decoration: none;
+  }
+
+  /* ── HOME THINKERS GRID — always 4 equal columns ─────────── */
+  .home-thinkers .index-grid--thinkers {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* ── HOME THINKER PORTRAITS ───────────────────────────────── */
+  .thinker-card__portrait-frame {
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    background: var(--color-rule);
+    border-radius: calc(var(--radius-md) - 4px);
   }
 
   @media (max-width: 768px) {

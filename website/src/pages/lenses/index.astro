@@ -8,8 +8,7 @@ import { lenses } from '../../data/lenses.js';
     <p class="page-header__eyebrow">Ways of seeing</p>
     <h1 class="page-header__title">19 Lenses</h1>
     <p class="page-header__descriptor">
-      Each lens is a named way of seeing a class of design problem —
-      the kind of problem that most practitioners solve by instinct alone.
+      Each lens names a class of design problem most practitioners solve by instinct alone.
       Naming it makes it transferable.
     </p>
   </section>
@@ -18,8 +17,10 @@ import { lenses } from '../../data/lenses.js';
     {lenses.map((lens, i) => (
       <a href={`/lenses/${lens.slug}`} class="lens-card">
         <span class="lens-card__number">{String(i + 1).padStart(2, '0')}</span>
-        <span class="lens-card__title">{lens.title}</span>
-        <span class="lens-card__question">{lens.question}</span>
+        <span class="lens-card__body">
+          <span class="lens-card__title">{lens.title}</span>
+          <span class="lens-card__question">{lens.question}</span>
+        </span>
       </a>
     ))}
   </section>

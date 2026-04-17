@@ -35,3 +35,6 @@ website/public/fonts/
 
 # Portrait images — not committed (licensing; download separately via BACKLOG.md)
 website/public/images/
+
+# ASCII portrait data — generated from gitignored images; run `npm run ascii` locally
+website/src/data/ascii-portraits.json

@@ -1,0 +1,32 @@
+{
+  "_comment": "Edit these values and run `npm run ascii` to regenerate portraits.",
+
+  "cols": 100,
+
+  "ramp": "dense",
+
+  "ramps": {
+    "classic":  "@#S%?*+;:,. ",
+    "dense":    "$@B%8&WM#*oahkbdpqwmZO0QLCJUYXzcvunxrjft/\\|()1{}[]?-_+~<>i!lI;:,\". ",
+    "block":    "█▓▒░  ",
+    "bold":     "#@%*+=-.  ",
+    "dot":      "●◉◎○·  "
+  },
+
+  "invert": false,
+
+  "contrast": 2.2,
+
+  "brightness": 1.0,
+
+  "gamma": 1.4,
+
+  "aspectCorrection": 0.48,
+
+  "animation": {
+    "scrambleDuration": 200,
+    "rowStagger": 0.1,
+    "intersectionThreshold": 0.35,
+    "crossfadeDuration": 500
+  }
+}

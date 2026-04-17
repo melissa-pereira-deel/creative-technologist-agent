@@ -14,10 +14,10 @@
   --color-rule:     #D4D4CE;   /* horizontal rules, borders */
   --color-surface:  #F5F5F2;   /* card / inset surface — white on gray */
 
-  /* Accent — amber */
-  --color-ochre:    #C86820;   /* links, highlights, active states */
-  --color-ochre-l:  #F5E8D8;   /* tag backgrounds, subtle tints */
-  --color-ochre-d:  #9E4E0E;   /* hover states */
+  /* Accent — purple */
+  --color-ochre:    #5B0EA8;   /* links, highlights, active states */
+  --color-ochre-l:  #EDE0FF;   /* tag backgrounds, subtle tints */
+  --color-ochre-d:  #440A80;   /* hover states */
 
   /* Semantic */
   --color-bg:       var(--color-paper);

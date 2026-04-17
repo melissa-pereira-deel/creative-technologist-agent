@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import AsciiPortrait from '../../components/AsciiPortrait.astro';
 
 export async function getStaticPaths() {
   const thinkers = await Astro.glob('../../content/thinkers/*.md');
@@ -11,6 +12,7 @@ export async function getStaticPaths() {
 
 const { thinker } = Astro.props;
 const { name, dates, field, quote, lenses = [], website, books = [], talks = [], portrait, portrait_credit } = thinker.frontmatter;
+
 ---
 
 <Base title={name} description={`${name} — ${field}`}>
@@ -22,18 +24,16 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
         <h1 class="thinker-header__name">{name}</h1>
         <p class="thinker-header__dates">{dates}</p>
       </div>
-      {portrait && (
-        <div class="thinker-header__portrait-wrap">
-          <img
-            class="thinker-header__portrait"
-            src={portrait}
-            alt={name}
-            width="240"
-            height="240"
+      <div class="thinker-header__portrait-wrap">
+        <div class="thinker-header__portrait-frame">
+          <AsciiPortrait
+            id={thinker.frontmatter.slug}
+            name={name}
+            photo={portrait}
           />
-          {portrait_credit && <p class="thinker-header__credit">{portrait_credit}</p>}
         </div>
-      )}
+        {portrait_credit && <p class="thinker-header__credit">{portrait_credit}</p>}
+      </div>
     </div>
   </section>
 
@@ -59,13 +59,25 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
           <div class="resources-group">
             <span class="resources-label">Books</span>
             <ul class="resource-list">
-              {books.map((book) => (
-                <li class="resource-item">
-                  <div class="resource-item__title">{book.title}</div>
-                  <div class="resource-item__meta">{book.year}</div>
-                  <p class="resource-item__description">{book.description}</p>
-                </li>
-              ))}
+              {books.map((book) => {
+                const goodreadsUrl = `https://www.goodreads.com/search?q=${encodeURIComponent(book.title + ' ' + name)}`;
+                return (
+                  <li class="resource-item resource-item--book">
+                    <a href={goodreadsUrl} target="_blank" rel="noopener noreferrer" class="resource-item__link">
+                      <div class="resource-item__cover"
+                           data-cover-title={book.title}
+                           data-cover-author={name}>
+                        <div class="resource-item__cover-placeholder" aria-hidden="true"></div>
+                      </div>
+                      <div class="resource-item__body">
+                        <div class="resource-item__title">{book.title} <span class="resource-item__ext">↗</span></div>
+                        <div class="resource-item__meta">{book.year}</div>
+                        <p class="resource-item__description">{book.description}</p>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
@@ -74,13 +86,22 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
           <div class="resources-group">
             <span class="resources-label">Talks</span>
             <ul class="resource-list">
-              {talks.map((talk) => (
-                <li class="resource-item">
-                  <div class="resource-item__title">{talk.title}</div>
-                  <div class="resource-item__meta">{talk.year} · {talk.platform}</div>
-                  <p class="resource-item__description">{talk.description}</p>
-                </li>
-              ))}
+              {talks.map((talk) => {
+                const talkUrl = talk.url
+                  ? talk.url
+                  : `https://www.youtube.com/results?search_query=${encodeURIComponent(talk.title + ' ' + name)}`;
+                return (
+                  <li class="resource-item resource-item--talk">
+                    <a href={talkUrl} target="_blank" rel="noopener noreferrer" class="resource-item__link">
+                      <div class="resource-item__body">
+                        <div class="resource-item__title">{talk.title} <span class="resource-item__ext">↗</span></div>
+                        <div class="resource-item__meta">{talk.year} · {talk.platform}</div>
+                        <p class="resource-item__description">{talk.description}</p>
+                      </div>
+                    </a>
+                  </li>
+                );
+              })}
             </ul>
           </div>
         )}
@@ -105,7 +126,6 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
           <div class="lens-connections__tags">
             {lenses.map((slug) => (
               <a href={`/lenses/${slug}`} class="connection-tag">
-                <span class="connection-tag__type">lens</span>
                 {slug.replace(/-/g, ' ')}
               </a>
             ))}
@@ -170,19 +190,11 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
     align-items: flex-end;
     gap: var(--space-2);
   }
-  .thinker-header__portrait {
+  .thinker-header__portrait-frame {
     width: 160px;
     height: 160px;
-    object-fit: cover;
-    object-position: top;
     border-radius: var(--radius-md);
-    filter: grayscale(100%);
-    opacity: 0.85;
-    transition: filter 0.3s ease, opacity 0.3s ease;
-  }
-  .thinker-header__portrait:hover {
-    filter: grayscale(0%);
-    opacity: 1;
+    overflow: hidden;
   }
   .thinker-header__credit {
     font-size: 10px;
@@ -239,13 +251,71 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
     list-style: none;
     display: flex;
     flex-direction: column;
-    gap: var(--space-6);
+    gap: var(--space-4);
   }
 
   .resource-item {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .resource-item__link {
+    display: flex;
+    gap: var(--space-5);
     padding: var(--space-5) var(--space-6);
     background: var(--color-surface);
     border-radius: var(--radius-md);
+    border: 2px solid transparent;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color var(--transition-base);
+  }
+
+  .resource-item__link:hover {
+    border-color: var(--color-ink);
+  }
+
+  /* ── Book cover ── */
+  .resource-item__cover {
+    flex-shrink: 0;
+    width: 68px;
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+    background: var(--color-rule);
+    align-self: flex-start;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  }
+
+  .resource-item__cover-placeholder {
+    width: 68px;
+    aspect-ratio: 2 / 3;
+    background: linear-gradient(135deg, var(--color-rule) 25%, var(--color-surface) 50%, var(--color-rule) 75%);
+    background-size: 200% 200%;
+    animation: shimmer 1.4s ease infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .resource-item__cover-img {
+    width: 68px;
+    aspect-ratio: 2 / 3;
+    object-fit: cover;
+    display: block;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .resource-item__cover-img.loaded {
+    opacity: 1;
+  }
+
+  /* ── Content body ── */
+  .resource-item__body {
+    flex: 1;
+    min-width: 0;
   }
 
   .resource-item__title {
@@ -253,6 +323,19 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
     font-size: var(--text-base);
     font-weight: 700;
     margin-bottom: var(--space-1);
+    line-height: var(--leading-snug);
+  }
+
+  .resource-item__ext {
+    font-size: 0.7em;
+    color: var(--color-muted);
+    margin-left: 2px;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+  }
+
+  .resource-item__link:hover .resource-item__ext {
+    opacity: 1;
   }
 
   .resource-item__meta {
@@ -264,7 +347,7 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
 
   .resource-item__description {
     font-size: var(--text-sm);
-    color: var(--color-ink);
+    color: var(--color-muted);
     line-height: var(--leading-base);
   }
 
@@ -309,3 +392,30 @@ const { name, dates, field, quote, lenses = [], website, books = [], talks = [],
     gap: var(--space-2);
   }
 </style>
+
+<script>
+  async function loadBookCovers() {
+    const covers = document.querySelectorAll<HTMLElement>('.resource-item__cover[data-cover-title]');
+    await Promise.all(Array.from(covers).map(async (cover) => {
+      const title = cover.dataset.coverTitle!;
+      const author = cover.dataset.coverAuthor!;
+      try {
+        const res = await fetch(
+          `https://openlibrary.org/search.json?title=${encodeURIComponent(title)}&author=${encodeURIComponent(author)}&fields=cover_i&limit=1`
+        );
+        const data = await res.json();
+        const coverId = data?.docs?.[0]?.cover_i;
+        if (!coverId) return;
+        const img = document.createElement('img');
+        img.src = `https://covers.openlibrary.org/b/id/${coverId}-L.jpg`;
+        img.alt = `${title} cover`;
+        img.className = 'resource-item__cover-img';
+        img.onload = () => img.classList.add('loaded');
+        cover.innerHTML = '';
+        cover.appendChild(img);
+      } catch { /* no cover available */ }
+    }));
+  }
+
+  loadBookCovers();
+</script>

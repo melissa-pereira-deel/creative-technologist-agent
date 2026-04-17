@@ -33,7 +33,6 @@ const next = index < lenses.length - 1 ? lenses[index + 1] : null;
             <div class="lens-connections__tags">
               {lens.thinkers.map(slug => (
                 <a href={`/thinkers/${slug}`} class="connection-tag">
-                  <span class="connection-tag__type">thinker</span>
                   {slug.replace(/-/g, ' ')}
                 </a>
               ))}
@@ -46,7 +45,6 @@ const next = index < lenses.length - 1 ? lenses[index + 1] : null;
             <div class="lens-connections__tags">
               {lens.concepts.map(slug => (
                 <a href={`/concepts/${slug}`} class="connection-tag">
-                  <span class="connection-tag__type">concept</span>
                   {slug.replace(/-/g, ' ')}
                 </a>
               ))}

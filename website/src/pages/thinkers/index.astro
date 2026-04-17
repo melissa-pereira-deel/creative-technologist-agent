@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import AsciiPortrait from '../../components/AsciiPortrait.astro';
 const thinkers = await Astro.glob('../../content/thinkers/*.md');
 const sorted = thinkers.sort((a, b) => a.frontmatter.name.localeCompare(b.frontmatter.name));
 ---
@@ -19,17 +20,11 @@ const sorted = thinkers.sort((a, b) => a.frontmatter.name.localeCompare(b.frontm
       {sorted.map((t) => (
         <a href={`/thinkers/${t.frontmatter.slug}`} class="thinker-card">
           <div class="thinker-card__portrait-frame">
-            {t.frontmatter.portrait ? (
-              <img
-                class="thinker-card__portrait"
-                src={t.frontmatter.portrait}
-                alt={t.frontmatter.name}
-              />
-            ) : (
-              <div class="thinker-card__portrait-placeholder">
-                <span>{t.frontmatter.name.split(' ').map(n => n[0]).join('')}</span>
-              </div>
-            )}
+            <AsciiPortrait
+              id={t.frontmatter.slug}
+              name={t.frontmatter.name}
+              photo={t.frontmatter.portrait}
+            />
           </div>
           <div class="thinker-card__name">{t.frontmatter.name}</div>
           <div class="thinker-card__dates">{t.frontmatter.dates}</div>
