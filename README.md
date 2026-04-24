@@ -16,7 +16,7 @@ This is an AI agent built around how they think — 19 ways of seeing problems, 
 
 > **⚠️ Status: Experimental**
 >
-> This is a working experiment, not a finished product. The agent and its 19 skills are actively tested, refined, and reshaped through real use. Expect things to evolve — skills will be sharpened, renamed, merged, or split as we learn what actually works in practice.
+> This is a working experiment, not a finished product. The agent and its 26 skills (19 thinking lenses + 7 engineering skills) are actively tested, refined, and reshaped through real use. Expect things to evolve — skills will be sharpened, renamed, merged, or split as we learn what actually works in practice.
 >
 > If you use it: try it, break it, tell us what happened. Issues, pull requests, and field reports ("I used skill X for Y and it produced Z") are the fuel this project runs on.
 
@@ -61,9 +61,9 @@ The agent is **tool-poor by design.** It doesn't query databases, run studies, o
 
 ---
 
-## The 19 skills
+## The 19 thinking lenses
 
-The skills are 19 ways of seeing problems that most people solve by instinct alone — named, defined, and made available to apply deliberately. Each one has a core question, a model, actionable checklists, named failure modes, and connections to the others. They're tuned for agent use: dense, no fluff.
+19 ways of seeing problems that most people solve by instinct alone — named, defined, and made available to apply deliberately. Each one has a core question, a model, actionable checklists, named failure modes, and connections to the others. Tuned for agent use: dense, no fluff.
 
 The power isn't in any single skill. It's in what they become when used together.
 
@@ -88,6 +88,22 @@ The power isn't in any single skill. It's in what they become when used together
 | [Temporal Reasoning](skills/temporal-reasoning/SKILL.md) | Where are we in the cycle and which layer is changing? |
 | [Tools for Thought](skills/tools-for-thought/SKILL.md) | Does this automate a task or amplify understanding? |
 | [Trust Architecture](skills/trust-architecture/SKILL.md) | Can a skeptical user verify the claim or must they trust us? |
+
+---
+
+## 7 engineering skills
+
+Technical domain skills built on the same principle — decisions, traps, and cross-skill connections, no teaching prose. These activate when the problem is *how to build well*, not *whether and what to build*. The same density standard as the thinking lenses; just a different structure (Concepts → Decisions → Traps → Connections instead of Model → Apply → Anti-Patterns).
+
+| Skill | What it covers |
+|---|---|
+| [Computational Reasoning](skills/computational-reasoning/SKILL.md) | Complexity trade-offs, data structure selection, graph algorithms, numerical discipline |
+| [Data-Oriented Design](skills/data-oriented-design/SKILL.md) | Cache-friendly layouts, SoA vs AoS, hot/cold splitting, SIMD-friendly data |
+| [Hardware-Aware Computing](skills/hardware-aware-computing/SKILL.md) | Apple Silicon topology, unified memory, Neural Engine vs GPU vs CPU, cache hierarchy |
+| [On-Device ML Optimization](skills/on-device-ml/SKILL.md) | CoreML pipeline, quantization, Neural Engine constraints, streaming inference |
+| [Performance Measurement](skills/performance-measurement/SKILL.md) | Instruments templates, os_signpost, MetricKit, thermal management, profiling methodology |
+| [Real-Time Audio Engineering](skills/realtime-audio/SKILL.md) | CoreAudio stack, RT thread contract, ring buffers, DSP via Accelerate, VAD |
+| [Swift Memory & Performance](skills/swift-memory-performance/SKILL.md) | ARC overhead, value types, stack vs heap, generics vs existentials, copy-on-write |
 
 ---
 
@@ -193,7 +209,8 @@ This project grows by adding ways of seeing, sharpening the ones that exist, and
 
 ### What belongs here
 
-- **New skills** — ways of seeing that aren't yet named. Must apply across domains (not "React patterns" or "SQL optimization" — those belong in other agents). Must be composable with the existing 19.
+- **New thinking lenses** — ways of seeing that aren't yet named. Must apply across domains, composable with the existing 19.
+- **New engineering skills** — technical domain skills with genuine decision content (not just reference material). Must follow the knowledge-domain structure in [skill_structure_algorithm.md](skill_structure_algorithm.md): Concepts → Decisions → Traps → Connections.
 - **Improvements to existing skills** — tighter language, corrected mistakes, checklist items from real use.
 - **New composition bundles** — problem types with their natural skill groupings.
 - **Field reports** — anonymized examples of the agent in action, especially non-obvious skill combinations that produced something useful.
@@ -207,11 +224,12 @@ This project grows by adding ways of seeing, sharpening the ones that exist, and
 
 ### Adding a new skill
 
-1. Read [skills/signal-discrimination/SKILL.md](skills/signal-discrimination/SKILL.md) — the canonical template.
-2. Create `skills/<skill-name>/SKILL.md` with: frontmatter (`name`, `description` with `Trigger on:` phrase list), 2-sentence opening, `## Model`, `## Apply`, `## Anti-Patterns`, `## Connections`. Under ~100 lines total.
-3. Check your triggers against the existing 19 for overlap.
-4. Add your skill to the table above and at least one composition bundle in [creative-technologist.md](creative-technologist.md).
-5. Open a pull request. Make the case: *what this names that wasn't nameable before*, and one example of the Apply checklist in use.
+1. Read [skill_structure_algorithm.md](skill_structure_algorithm.md) — the algorithm that defines how skills are structured, validated, and kept dense. It covers both skill types and includes a quality checklist.
+2. For a **thinking lens**: use [skills/signal-discrimination/SKILL.md](skills/signal-discrimination/SKILL.md) as a canonical example. Structure: `## Model`, `## Apply`, `## Anti-Patterns`, `## Connections`.
+3. For an **engineering skill**: use any of the [engineering skills](skills/performance-measurement/SKILL.md) as a reference. Structure: Concepts sections → `## Decisions`, `## Traps`, `## Connections`.
+4. Create `skills/<skill-name>/SKILL.md`. Check your triggers against existing skills for overlap.
+5. Add your skill to the appropriate table above and at least one composition bundle in [creative-technologist.md](creative-technologist.md).
+6. Open a pull request. Make the case: *what this names that wasn't nameable before*, and one example of the Apply checklist (or Decisions section) in use.
 
 ### Style rules
 
