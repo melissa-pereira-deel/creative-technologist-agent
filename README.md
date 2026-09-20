@@ -16,7 +16,7 @@ This is an AI agent built around how they think — 19 ways of seeing problems, 
 
 > **⚠️ Status: Experimental**
 >
-> This is a working experiment, not a finished product. The agent and its 26 skills (19 thinking lenses + 7 engineering skills) are actively tested, refined, and reshaped through real use. Expect things to evolve — skills will be sharpened, renamed, merged, or split as we learn what actually works in practice.
+> This is a working experiment, not a finished product. The agent and its 37 skills (19 thinking lenses + 18 engineering skills) are actively tested, refined, and reshaped through real use. Expect things to evolve — skills will be sharpened, renamed, merged, or split as we learn what actually works in practice.
 >
 > If you use it: try it, break it, tell us what happened. Issues, pull requests, and field reports ("I used skill X for Y and it produced Z") are the fuel this project runs on.
 
@@ -91,19 +91,30 @@ The power isn't in any single skill. It's in what they become when used together
 
 ---
 
-## 7 engineering skills
+## 18 engineering skills
 
 Technical domain skills built on the same principle — decisions, traps, and cross-skill connections, no teaching prose. These activate when the problem is *how to build well*, not *whether and what to build*. The same density standard as the thinking lenses; just a different structure (Concepts → Decisions → Traps → Connections instead of Model → Apply → Anti-Patterns).
 
 | Skill | What it covers |
 |---|---|
+| [AI/ML Architecture](skills/ai-ml-architecture/SKILL.md) | Transformers, embeddings, RAG, fine-tuning vs prompting, on-device inference, agent architectures |
 | [Computational Reasoning](skills/computational-reasoning/SKILL.md) | Complexity trade-offs, data structure selection, graph algorithms, numerical discipline |
+| [Concurrency & Parallelism](skills/concurrency-parallelism/SKILL.md) | Swift concurrency, GCD, race conditions, deadlocks, priority inversion, lock-free patterns |
+| [Cryptography & Privacy Engineering](skills/cryptography-privacy/SKILL.md) | Hashing vs encryption, Keychain and Secure Enclave, data at rest and in transit, threat modeling |
 | [Data-Oriented Design](skills/data-oriented-design/SKILL.md) | Cache-friendly layouts, SoA vs AoS, hot/cold splitting, SIMD-friendly data |
+| [Data Systems](skills/data-systems/SKILL.md) | Database paradigms, caching, event sourcing, CAP theorem |
+| [Financial Data Engineering](skills/financial-data/SKILL.md) | OHLCV, order books, market data sources, technical indicators, numeric precision |
 | [Hardware-Aware Computing](skills/hardware-aware-computing/SKILL.md) | Apple Silicon topology, unified memory, Neural Engine vs GPU vs CPU, cache hierarchy |
+| [Interaction Laws](skills/interaction-laws/SKILL.md) | Fitts, Hick, Miller, Jakob, the Doherty threshold, Weber-Fechner, Tesler, Peak-End |
+| [macOS Platform Engineering](skills/macos-platform/SKILL.md) | App Sandbox, notarization, XPC, menu bar apps, background execution, distribution |
+| [Network & API Engineering](skills/network-api/SKILL.md) | HTTP lifecycle, REST design, caching headers, real-time transports, auth, CORS |
 | [On-Device ML Optimization](skills/on-device-ml/SKILL.md) | CoreML pipeline, quantization, Neural Engine constraints, streaming inference |
+| [Perceptual Design](skills/perceptual-design/SKILL.md) | Gestalt principles, color, typography, visual hierarchy, data-viz encoding, motion |
 | [Performance Measurement](skills/performance-measurement/SKILL.md) | Instruments templates, os_signpost, MetricKit, thermal management, profiling methodology |
 | [Real-Time Audio Engineering](skills/realtime-audio/SKILL.md) | CoreAudio stack, RT thread contract, ring buffers, DSP via Accelerate, VAD |
 | [Swift Memory & Performance](skills/swift-memory-performance/SKILL.md) | ARC overhead, value types, stack vs heap, generics vs existentials, copy-on-write |
+| [Systems Architecture](skills/systems-architecture/SKILL.md) | Monolith to microservices, queues vs event streaming, resilience, idempotency, observability |
+| [Web Platform Internals](skills/web-platform/SKILL.md) | Rendering pipeline, event loop, hydration, Core Web Vitals, CSS layout, web workers |
 
 ---
 
