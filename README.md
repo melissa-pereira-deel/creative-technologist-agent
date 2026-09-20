@@ -254,6 +254,16 @@ This project grows by adding ways of seeing, sharpening the ones that exist, and
 
 ---
 
+## Sibling project
+
+[tiny-model-lab](https://github.com/melissa-pereira-deel/tiny-model-lab) — a harness for deciding whether a task should be a tiny on-device model at all, and proving it beat the thing it replaced before anything ships. Where two skills here get measured rather than reasoned about.
+
+[On-Device ML Optimization](skills/on-device-ml/SKILL.md) asks the quantization and Core ML questions; that repo answers them in bytes on disk and a disagreement rate against the full-precision model. [Performance as Experience](skills/performance-as-experience/SKILL.md) names 100ms as the instant boundary; that repo compiles the same threshold into a gate that fails a run for crossing it. It bins the rest differently — instant / flow / attention, from Miller and Nielsen — so the two are a shared foundation, not one taxonomy.
+
+Its central rule is a useful counterweight to this agent's: every experiment must name a specific existing thing it must beat, with a measured number, *before* training starts. Ties go to the baseline.
+
+---
+
 ## License
 
 MIT. See [LICENSE](LICENSE).
