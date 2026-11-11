@@ -91,11 +91,20 @@ async function imageToAscii(src) {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 const imagesDir = join(ROOT, 'public/images/thinkers');
+const outPath = join(ROOT, 'src/data/ascii-portraits.json');
+
+// Clean checkouts and CI builds (e.g. Vercel) have no portraits, but
+// AsciiPortrait.astro imports this file, so an empty map lets the site build
+// without portraits. Existing generated data is never overwritten.
+function exitWithoutImages() {
+  if (!existsSync(outPath)) writeFileSync(outPath, '{}\n');
+  process.exit(0);
+}
 
 if (!existsSync(imagesDir)) {
   console.warn('⚠  No images directory found at', imagesDir);
   console.warn('   Portrait images are not committed. Add them locally to generate ASCII.');
-  process.exit(0);
+  exitWithoutImages();
 }
 
 const files = readdirSync(imagesDir)
@@ -104,7 +113,7 @@ const files = readdirSync(imagesDir)
 if (files.length === 0) {
   console.warn('⚠  No images found in', imagesDir);
   console.warn('   Download portraits from the sources in BACKLOG.md.');
-  process.exit(0);
+  exitWithoutImages();
 }
 
 console.log(`\nGenerating ASCII portraits`);
@@ -136,7 +145,6 @@ const output = {
   portraits,
 };
 
-const outPath = join(ROOT, 'src/data/ascii-portraits.json');
 writeFileSync(outPath, JSON.stringify(output, null, 2));
 
 console.log(`\n✓ Wrote ${Object.keys(portraits).length} portraits → src/data/ascii-portraits.json\n`);
